@@ -1,0 +1,293 @@
+<!doctype html>
+<!--
+  PROTOTYPE — throwaway. Question: "What should the one-screen Van Gogh Gallery look like?"
+  Three structurally different variants, switchable via ?variant=A|B|C, ← → keys, or the bottom bar.
+  Open this file directly in a browser. No build step.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PROTOTYPE · Christine Wanjau · Gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Caveat:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --night:#0b1d4a; --deep:#132e6b; --blue:#2a5caa; --sky:#5b8bd0;
+    --sun:#f2c12e; --wheat:#e9b949; --ochre:#c8792b; --cypress:#1f3d2b;
+    --canvas:#f4ead2; --ink:#1a1a1a; --frame:#b08a3e; --wall:#f6f2ea;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:#f6f2ea;overflow:hidden}
+  h1,h2,h3{font-family:"Playfair Display",serif}
+  .hand{font-family:Caveat,cursive}
+  a{color:inherit}
+  .variant{display:none;height:100vh;width:100vw;position:relative}
+  .variant.active{display:block}
+
+  /* Shared painted night sky (CSS-only swirls, Starry Night inspired) */
+  .sky{position:absolute;inset:0;z-index:0;
+    background:
+      radial-gradient(circle at 82% 18%, var(--sun) 0 3.5%, rgba(242,193,46,.35) 4.5%, transparent 9%),
+      radial-gradient(circle at 20% 22%, rgba(255,240,170,.9) 0 .6%, transparent 2.5%),
+      radial-gradient(circle at 40% 12%, rgba(255,240,170,.9) 0 .5%, transparent 2%),
+      radial-gradient(circle at 62% 30%, rgba(255,240,170,.9) 0 .5%, transparent 2%),
+      radial-gradient(circle at 10% 50%, rgba(255,240,170,.8) 0 .4%, transparent 1.8%),
+      repeating-radial-gradient(ellipse at 45% 35%, rgba(91,139,208,.25) 0 14px, rgba(19,46,107,.0) 14px 30px),
+      repeating-radial-gradient(ellipse at 70% 60%, rgba(91,139,208,.18) 0 10px, transparent 10px 26px),
+      linear-gradient(180deg, var(--deep), var(--night) 70%);
+  }
+  .sky::after{content:"";position:absolute;inset:0;
+    background:repeating-linear-gradient(115deg, rgba(255,255,255,.035) 0 3px, transparent 3px 9px);
+    animation:drift 30s linear infinite}
+  @keyframes drift{to{background-position:300px 0}}
+
+  /* Minimal gallery wall: the painted sky only appears inside frames now */
+  .variant > .sky{background:#f6f2ea}
+  .variant > .sky::after{display:none}
+  .art{filter:saturate(.75);opacity:.85}
+  #A .eyebrow{color:var(--ochre)!important}
+  #A h1 em,#C .panel.center h1 em{color:var(--blue)}
+  #A .sig{color:var(--ink)}
+  .btn{background:var(--ink);color:var(--wall,#f6f2ea)}
+  .btn.ghost{color:var(--ink);border-color:rgba(26,26,26,.35)}
+  #B{background:#f6f2ea}
+  #B .room{color:var(--ink);background:none;border-radius:0;border-left:2px solid transparent}
+  #B .room.on{background:none;color:var(--ink);border-left-color:var(--ochre)}
+  #C .panel.center{background:transparent;color:var(--ink);border:0;box-shadow:none}
+  #C .panel.center .hand{color:var(--ochre)}
+
+  /* Gilded frame */
+  .frame{background:var(--canvas);color:var(--ink);border:10px solid var(--frame);
+    box-shadow:inset 0 0 0 3px #e7c56d, inset 0 0 0 6px #7a5a1d, 0 18px 40px rgba(0,0,0,.5);
+    cursor:pointer;transition:transform .25s, box-shadow .25s;position:relative}
+  .frame:hover{transform:translateY(-6px) rotate(-.6deg);box-shadow:inset 0 0 0 3px #e7c56d, inset 0 0 0 6px #7a5a1d, 0 26px 50px rgba(0,0,0,.6)}
+  .placard{font-size:.78rem;line-height:1.35}
+  .placard .medium{font-style:italic;color:#5a4a2a}
+  .btn{display:inline-block;padding:.55rem 1rem;border-radius:999px;background:var(--sun);color:var(--ink);font-weight:600;text-decoration:none;font-size:.85rem}
+  .btn.ghost{background:transparent;color:var(--canvas);border:1px solid rgba(244,234,210,.5)}
+
+  /* ============ VARIANT A — Salon wall ============ */
+  #A .wrap{position:relative;z-index:1;height:100%;display:grid;grid-template-columns:1.05fr 1.4fr;gap:3vw;padding:5vh 5vw;align-items:center}
+  #A .statement .eyebrow{letter-spacing:.25em;font-size:.72rem;color:var(--wheat);text-transform:uppercase}
+  #A h1{font-size:clamp(2.2rem,4.4vw,4rem);line-height:1.05;margin:.6rem 0 1rem}
+  #A h1 em{color:var(--sun)}
+  #A .intro{max-width:34ch;opacity:.9;line-height:1.55}
+  #A .actions{margin-top:1.4rem;display:flex;gap:.6rem;flex-wrap:wrap}
+  #A .wall{display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(2,1fr);gap:1.4rem;height:72vh}
+  #A .p1{grid-column:1/5;grid-row:1/2}
+  #A .p2{grid-column:5/7;grid-row:1/3}
+  #A .p3{grid-column:1/3;grid-row:2/3}
+  #A .p4{grid-column:3/5;grid-row:2/3}
+  #A .frame{padding:1rem;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
+  #A .art{position:absolute;inset:0;opacity:.9}
+  #A .placard{position:relative;background:rgba(244,234,210,.94);padding:.55rem .7rem;border-left:3px solid var(--ochre)}
+  #A .placard h3{font-size:1rem}
+  #A .sig{position:absolute;right:4vw;bottom:3vh;z-index:2;font-size:1.6rem;color:var(--sun);display:flex;gap:1rem;align-items:baseline}
+  #A .sig a{font-family:Inter;font-size:.8rem;opacity:.8}
+
+  /* ============ VARIANT B — One masterpiece, rooms as brushstroke tabs ============ */
+  #B{background:#20160c}
+  #B .wrap{position:relative;z-index:1;height:100%;display:grid;grid-template-rows:auto 1fr auto;padding:3.5vh 5vw;gap:2vh}
+  #B header{display:flex;justify-content:space-between;align-items:baseline}
+  #B header h1{font-size:1.6rem}
+  #B header .hand{font-size:1.5rem;color:var(--sun)}
+  #B .easel{display:grid;grid-template-columns:220px 1fr;gap:2.5vw;min-height:0}
+  #B .rooms{display:flex;flex-direction:column;gap:.7rem;justify-content:center}
+  #B .room{all:unset;cursor:pointer;padding:.8rem 1rem;font-family:"Playfair Display";font-size:1.05rem;color:var(--canvas);
+    background:linear-gradient(100deg, transparent 0 4%, rgba(42,92,170,.55) 6% 88%, transparent 96%);border-radius:40% 8% 35% 10%/30% 60% 20% 50%;transition:.2s}
+  #B .room small{display:block;font-family:Inter;font-size:.72rem;opacity:.75}
+  #B .room.on{background:linear-gradient(100deg, transparent 0 3%, var(--sun) 5% 90%, transparent 97%);color:var(--ink)}
+  #B .masterpiece{position:relative;cursor:default;display:grid;grid-template-columns:1.2fr 1fr;overflow:hidden;min-height:0}
+  #B .masterpiece:hover{transform:none}
+  #B .canvas-art{position:relative;overflow:hidden}
+  #B .canvas-art .sky{position:absolute}
+  #B .canvas-art .title{position:absolute;left:1.5rem;bottom:1.5rem;color:var(--canvas);z-index:2}
+  #B .canvas-art .title h2{font-size:clamp(1.6rem,3vw,2.6rem)}
+  #B .notes{padding:1.6rem 1.8rem;overflow:auto;font-size:.92rem;line-height:1.55}
+  #B .notes ul{padding-left:1.1rem;margin-top:.6rem}
+  #B .notes li{margin:.35rem 0}
+  #B footer{display:flex;justify-content:space-between;align-items:center;font-size:.85rem}
+
+  /* ============ VARIANT C — Triptych ============ */
+  #C .wrap{position:relative;z-index:1;height:100%;display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:2vw;padding:6vh 4vw 9vh}
+  #C .panel{padding:1.4rem;display:flex;flex-direction:column;overflow:hidden}
+  #C .panel.center{background:var(--deep);color:var(--canvas);justify-content:center;text-align:center;cursor:default}
+  #C .panel.center:hover{transform:none}
+  #C .panel.center h1{font-size:clamp(2rem,3.4vw,3.2rem);line-height:1.08;margin:.6rem 0}
+  #C .panel.center h1 em{color:var(--sun)}
+  #C .panel.center .hand{font-size:1.5rem;color:var(--wheat)}
+  #C .panel .art{height:46%;margin:-1.4rem -1.4rem 1rem;position:relative;overflow:hidden}
+  #C .panel h3{font-size:1.2rem;margin-bottom:.2rem}
+  #C .panel .more{margin-top:auto;font-family:Caveat;font-size:1.3rem;color:var(--ochre)}
+  #C .stack{display:flex;flex-direction:column;gap:2vw}
+  #C .stack .panel{flex:1}
+  #C .stack .art{height:40%}
+
+  /* Painted mini-artworks for frames */
+  .art.a1{background:radial-gradient(circle at 75% 30%,var(--sun) 0 10%,transparent 11%),repeating-radial-gradient(circle at 40% 60%,var(--blue) 0 8px,var(--deep) 8px 16px)}
+  .art.a2{background:repeating-linear-gradient(80deg,var(--wheat) 0 6px,var(--sun) 6px 12px,var(--ochre) 12px 15px),linear-gradient(var(--sky),var(--sky))}
+  .art.a3{background:radial-gradient(ellipse at 50% 100%,var(--cypress) 0 30%,transparent 31%),repeating-linear-gradient(160deg,var(--sky) 0 7px,var(--blue) 7px 14px)}
+  .art.a4{background:repeating-radial-gradient(circle at 30% 30%,var(--sun) 0 5px,var(--ochre) 5px 10px,#7a3e12 10px 13px)}
+
+  /* Overlay (shared) */
+  .overlay{position:fixed;inset:0;background:rgba(5,10,30,.75);display:none;place-items:center;z-index:50;backdrop-filter:blur(3px)}
+  .overlay.open{display:grid}
+  .overlay .frame{max-width:640px;width:92vw;max-height:84vh;overflow:auto;padding:2rem;cursor:default}
+  .overlay .frame:hover{transform:none}
+  .overlay h2{font-size:1.7rem}
+  .overlay ul{padding-left:1.1rem;margin:.8rem 0;line-height:1.55;font-size:.92rem}
+  .overlay .close{position:absolute;top:.6rem;right:.8rem;background:none;border:0;font-size:1.6rem;cursor:pointer}
+
+  /* Prototype switcher bar */
+  .switcher{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:100;display:flex;align-items:center;gap:.6rem;
+    background:#fff;color:#111;border-radius:999px;padding:.35rem .5rem;box-shadow:0 6px 24px rgba(0,0,0,.45);font:600 .8rem Inter;border:2px dashed #e11d48}
+  .switcher button{all:unset;cursor:pointer;width:28px;height:28px;display:grid;place-items:center;border-radius:50%;background:#eee}
+  .switcher .tag{color:#e11d48;font-size:.65rem;letter-spacing:.1em}
+
+  /* Mobile: stack, allow scroll */
+  @media (max-width:820px){
+    body{overflow:auto}
+    .variant{height:auto;min-height:100vh}
+    .sky{position:fixed}
+    #A .wrap,#C .wrap,#B .easel,#B .masterpiece{grid-template-columns:1fr}
+    #A .wall{display:flex;flex-direction:column;height:auto}
+    #A .frame{min-height:180px}
+    #C .panel{min-height:280px}
+    #B .rooms{flex-direction:row;overflow:auto}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ A: Salon wall ============ -->
+<section class="variant" id="A" data-name="Salon wall">
+  <div class="sky"></div>
+  <div class="wrap">
+    <div class="statement">
+      <p class="eyebrow">Christine Wanjau · Software Engineer · Nairobi</p>
+      <h1>I build cloud products <em>and the AI inside them.</em></h1>
+      <p class="intro">Four years at Microsoft turning complex systems into calm experiences: LLM tools, RAG assistants, React interfaces and the pipelines that ship them. Software is my medium.</p>
+      <div class="actions">
+        <a class="btn" href="#" onclick="return false">Download CV</a>
+        <a class="btn ghost" href="mailto:wanjauchristine0@gmail.com">Say hello</a>
+      </div>
+    </div>
+    <div class="wall">
+      <div class="frame p1" data-piece="ai"><div class="art a1"></div><div class="placard"><h3>Applied AI at Microsoft</h3><p class="medium">LLMs, RAG &amp; evaluation on Azure · 2024–now</p><p>Copilots that check config risk before it ships.</p></div></div>
+      <div class="frame p2" data-piece="product"><div class="art a2"></div><div class="placard"><h3>Product &amp; Frontend</h3><p class="medium">React &amp; TypeScript · 2022–now</p><p>Feature management used by ~50% of App Config stores.</p></div></div>
+      <div class="frame p3" data-piece="oss"><div class="art a3"></div><div class="placard"><h3>Open Source &amp; DevOps</h3><p class="medium">Python, TS, CI/CD</p><p>30+ PRs, 5,000+ customers.</p></div></div>
+      <div class="frame p4" data-piece="early"><div class="art a4"></div><div class="placard"><h3>Early works</h3><p class="medium">Angular, React · 2021</p><p>Windows Admin Center, a startup launch.</p></div></div>
+    </div>
+  </div>
+  <div class="sig"><span class="hand">Christine W.</span><a href="https://github.com/ChristineWanjau">GitHub</a><a href="https://linkedin.com/in/christine-wambui-29307319b">LinkedIn</a></div>
+</section>
+
+<!-- ============ B: One masterpiece ============ -->
+<section class="variant" id="B" data-name="One masterpiece, many rooms">
+  <div class="wrap">
+    <header><button class="btn ghost" id="back" style="cursor:pointer">← Back to the gallery</button><span class="hand">Software engineering is my art.</span></header>
+    <div class="easel">
+      <nav class="rooms">
+        <button class="room on" data-room="ai">Applied AI<small>Microsoft · 2024–now</small></button>
+        <button class="room" data-room="product">Product &amp; Frontend<small>Microsoft · 2022–now</small></button>
+        <button class="room" data-room="oss">Open Source &amp; DevOps<small>Microsoft · 2022–now</small></button>
+        <button class="room" data-room="early">Early works<small>2021</small></button>
+      </nav>
+      <div class="frame masterpiece">
+        <div class="canvas-art"><div class="sky"></div><div class="title"><p class="hand" style="font-size:1.3rem;color:var(--sun)" id="b-medium"></p><h2 id="b-title"></h2></div></div>
+        <div class="notes" id="b-notes"></div>
+      </div>
+    </div>
+    <footer><span>I build cloud products and the AI inside them.</span><span style="display:flex;gap:.6rem"><a class="btn" href="#" onclick="return false">CV</a><a class="btn ghost" href="mailto:wanjauchristine0@gmail.com">Email</a></span></footer>
+  </div>
+</section>
+
+<!-- ============ C: Triptych ============ -->
+<section class="variant" id="C" data-name="Triptych">
+  <div class="sky"></div>
+  <div class="wrap">
+    <div class="stack">
+      <div class="frame panel" data-piece="ai"><div class="art a1"></div><h3>Applied AI</h3><p class="placard medium">LLMs · RAG · evaluation</p><span class="more">view the piece →</span></div>
+      <div class="frame panel" data-piece="oss"><div class="art a3"></div><h3>Open Source &amp; DevOps</h3><p class="placard medium">Python · CI/CD</p><span class="more">view →</span></div>
+    </div>
+    <div class="frame panel center">
+      <span class="hand">the artist</span>
+      <h1>Christine Wanjau<br><em>builds cloud products and the AI inside them.</em></h1>
+      <p style="opacity:.85;max-width:36ch;margin:0 auto">Software Engineer II at Microsoft · Nairobi · MS CS (AI) at Georgia Tech.</p>
+      <div style="margin-top:1.4rem;display:flex;gap:.6rem;justify-content:center"><a class="btn" href="#" onclick="return false">CV</a><a class="btn ghost" href="mailto:wanjauchristine0@gmail.com">Email</a><a class="btn ghost" href="https://github.com/ChristineWanjau">GitHub</a></div>
+    </div>
+    <div class="stack">
+      <div class="frame panel" data-piece="product"><div class="art a2"></div><h3>Product &amp; Frontend</h3><p class="placard medium">React · TypeScript</p><span class="more">view →</span></div>
+      <div class="frame panel" data-piece="early"><div class="art a4"></div><h3>Early works</h3><p class="placard medium">Angular · React · 2021</p><span class="more">view →</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="overlay" id="overlay"><div class="frame"><button class="close" aria-label="Close">×</button><div id="ov"></div></div></div>
+
+<div class="switcher"><span class="tag">PROTOTYPE</span><button id="prev">←</button><span id="label"></span><button id="next">→</button></div>
+
+<script>
+const PIECES = {
+  ai:{title:"Applied AI", medium:"LLMs, RAG & evaluation · Microsoft · 2024–now", points:[
+    "Led the prototype of an AI configuration risk assessment: evaluated LLMs and prompt strategies, and drove Responsible AI reviews.",
+    "Built a RAG incident assistant that writes KQL from docs, logs and schemas (hackathon honorable mention).",
+    "Shipped a natural-language bulk editor that turns requests into previewable, structured operations.",
+    "Delivered two LLM configuration assistants and GPT-4.1 / GPT-5 support.",
+    "Migrated Knockout.js to React with an AI workflow of specialized agents and skills."]},
+  product:{title:"Product & Frontend", medium:"React & TypeScript on Azure · 2022–now", points:[
+    "Built a new feature management experience used by ~50% of Azure App Configuration stores.",
+    "Scaled the UI to 10,000+ key-values with pagination, caching, and retries with jitter.",
+    "Owned service tiers, replicas and retention end to end, from Figma to GA."]},
+  oss:{title:"Open Source & DevOps", medium:"Python, TypeScript, CI/CD · 2022–now", points:[
+    "Owned the App Configuration CLI in Azure/azure-cli: 30+ open-source PRs.",
+    "Maintained CI/CD integrations serving 5,000+ customers; added workload identity federation.",
+    "Monthly on-call for two global Azure services."]},
+  early:{title:"Early works", medium:"Angular, React, .NET · 2021", points:[
+    "Microsoft intern: Angular experiences for Windows Admin Center.",
+    "Mobilit Africa: built the first React product with the founding team.",
+    "Microsoft Student Hackathon 2021: Global Winner."]}
+};
+const list = p => `<ul>${p.points.map(x=>`<li>${x}</li>`).join("")}</ul>`;
+
+// Overlay
+const ov=document.getElementById("overlay");
+document.querySelectorAll("[data-piece]").forEach(el=>el.addEventListener("click",()=>{
+  // Landing (A) → detail view (B) with this piece selected
+  if(el.closest("#A")){room(el.dataset.piece);cur="B";show("B");return;}
+  const p=PIECES[el.dataset.piece];
+  document.getElementById("ov").innerHTML=`<p class="hand" style="font-size:1.3rem;color:var(--ochre)">${p.medium}</p><h2>${p.title}</h2>${list(p)}`;
+  ov.classList.add("open");
+}));
+ov.addEventListener("click",e=>{if(e.target===ov||e.target.classList.contains("close"))ov.classList.remove("open")});
+
+// Variant B rooms
+function room(k){const p=PIECES[k];
+  document.getElementById("b-title").textContent=p.title;
+  document.getElementById("b-medium").textContent=p.medium;
+  document.getElementById("b-notes").innerHTML=`<p class="hand" style="font-size:1.4rem;color:var(--ochre)">placard</p>${list(p)}`;
+  document.querySelectorAll(".room").forEach(r=>r.classList.toggle("on",r.dataset.room===k));}
+document.querySelectorAll(".room").forEach(r=>r.addEventListener("click",()=>room(r.dataset.room)));
+room("ai");
+
+// Switcher
+const V=["A","B","C"];
+function show(v){
+  document.querySelectorAll(".variant").forEach(s=>s.classList.toggle("active",s.id===v));
+  document.getElementById("label").textContent=`${v} · ${document.getElementById(v).dataset.name}`;
+  const u=new URL(location);u.searchParams.set("variant",v);history.replaceState(null,"",u);
+}
+let cur=new URLSearchParams(location.search).get("variant")||"A"; if(!V.includes(cur))cur="A";
+const step=d=>{cur=V[(V.indexOf(cur)+d+V.length)%V.length];show(cur)};
+document.getElementById("back").onclick=()=>{cur="A";show("A")};
+addEventListener("keydown",e=>{if(e.key==="Escape"&&cur==="B"){cur="A";show("A")}});
+document.getElementById("prev").onclick=()=>step(-1);
+document.getElementById("next").onclick=()=>step(1);
+addEventListener("keydown",e=>{if(e.target.matches("input,textarea,[contenteditable]"))return;
+  if(e.key==="ArrowLeft")step(-1);if(e.key==="ArrowRight")step(1);if(e.key==="Escape")ov.classList.remove("open")});
+show(cur);
+</script>
+</body>
+</html>
