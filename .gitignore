@@ -1,0 +1,5 @@
+# Private CVs (contain phone number)
+*CV*.docx
+*CV*.pdf
+~$*
+.DS_Store
