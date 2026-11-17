@@ -32,6 +32,28 @@ export const about = {
   painting: { src: "/art/starry-night.jpg", title: "The Starry Night", year: "1889" },
 };
 
+export interface Credential {
+  name: string;
+  detail: string;
+  url?: string; // add a Microsoft Learn verification link here when available
+}
+
+export const credentials: Credential[] = [
+  { name: "Microsoft Certified: Azure AI Fundamentals", detail: "Microsoft · 2026",
+    url: "https://learn.microsoft.com/api/credentials/share/en-us/ChristineWanjau-9748/FDF2FDD1C9B62B16?sharingId=63F32B317EA1820A" },
+  { name: "Microsoft Certified: Azure Fundamentals", detail: "Microsoft · 2021",
+    url: "https://www.credly.com/badges/4802a004-7f1c-4fc6-874a-e17d263d04a7/public_url" },
+  { name: "ML Fundamentals Champion", detail: "Microsoft Africa Development Center, 18-week program · 2023",
+    url: "https://www.credly.com/badges/4904c2ea-6305-4432-96f1-947ee6712fcf/public_url" },
+  { name: "Microsoft Student Hackathon", detail: "Grand Prize, Global Winner · 2021",
+    url: "https://www.credly.com/badges/39dd8ab3-49d1-47bc-a8f2-45847becb41e/public_url" },
+];
+
+export const education = [
+  { school: "Georgia Institute of Technology", detail: "MS Computer Science, AI specialization · expected 2028" },
+  { school: "University of Nairobi", detail: "BSc Computer Science · 2022" },
+];
+
 export interface Role {
   title: string;
   org: string;
