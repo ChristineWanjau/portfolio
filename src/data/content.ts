@@ -19,12 +19,11 @@ export const stack = [
 
 export const about = {
   paragraphs: [
-    "I'm a Software Engineer II at Microsoft, where I've spent four years on Azure App Configuration: the React interfaces, CLI and CI/CD integrations customers use every day, and lately the AI features inside them.",
-    "I build LLM tools, RAG assistants and AI-assisted workflows, and I care about the part after the demo: evaluation, Responsible AI review, and shipping safely to production.",
-    "I'm studying for an MS in Computer Science (AI) at Georgia Tech. When I'm not shipping, I'm mentoring women in tech across Kenya.",
+    "Four-plus years shipping cloud products, from the interfaces customers click to the CLIs and pipelines behind them. Today I build AI into Azure App Configuration at Microsoft, a service behind 100,000+ configuration stores, and I work AI-first, with agents and custom skills in my daily loop. Before that, I shipped tools for Windows server admins and a startup's first product in Nairobi. I like owning a feature end to end, and I care most about the part after the demo: evaluation, safety review and shipping to production.",
+    "I'm also studying for an MS in Computer Science, specializing in AI, at Georgia Tech, and mentoring women in tech across Kenya.",
   ],
   stats: [
-    { value: "4+ yrs", label: "shipping at Microsoft" },
+    { value: "4+ yrs", label: "shipping cloud products" },
     { value: "15+", label: "customer-facing features" },
     { value: "30+", label: "open-source PRs" },
     { value: "5,000+", label: "customers on my CI/CD tools" },
