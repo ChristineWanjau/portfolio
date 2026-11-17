@@ -38,9 +38,9 @@ const img = (src: string) => `${base}${src}`;
       <h1 class="name">{profile.name}</h1>
       <p class="headline">{profile.headline}</p>
       <div class="actions">
-        <a class="btn" href={`mailto:${profile.email}`}>Say hello</a>
-        <a class="btn ghost" href={profile.github}>GitHub</a>
-        <a class="btn ghost" href={profile.linkedin}>LinkedIn</a>
+        <a class="btn" href={`mailto:${profile.email}`} target="_blank" rel="noopener">Say hello</a>
+        <a class="btn ghost" href={profile.github} target="_blank" rel="noopener">GitHub</a>
+        <a class="btn ghost" href={profile.linkedin} target="_blank" rel="noopener">LinkedIn</a>
       </div>
       <p class="hero-stack">{heroStack.join(" · ")}</p>
     </section>
