@@ -49,7 +49,9 @@ export interface Role {
   title: string;
   org: string;
   dates: string;
-  points: string[];
+  intro?: string;
+  groups?: { label: string; points: string[] }[];
+  points?: string[];
 }
 
 export const experience: Role[] = [
@@ -57,10 +59,33 @@ export const experience: Role[] = [
     title: "Software Engineer II",
     org: "Microsoft · Azure App Configuration",
     dates: "Aug 2022 – now",
-    points: [
-      "Applied AI: led an AI configuration risk assessment prototype, built a RAG incident assistant that writes KQL, and shipped a natural-language bulk editor.",
-      "Product & frontend: built the React feature management experience used by ~50% of App Configuration stores, scaled to 10,000+ key-values.",
-      "Open source & DevOps: owned the App Configuration CLI (30+ PRs) and CI/CD integrations serving 5,000+ customers.",
+    intro: "Azure App Configuration is Azure's managed service for application settings and feature flags. Teams store configuration in one place and change how their apps behave (gradual rollouts, kill switches, A/B experiments) without redeploying code. It serves 100,000+ configuration stores and billions of requests a day.",
+    groups: [
+      {
+        label: "AI & LLMs",
+        points: [
+          "Led the design and prototype of an LLM-based risk assessment that flags potentially disruptive configuration changes before deployment; compared models and prompt strategies, and drove the security, privacy and Responsible AI reviews.",
+          "Built a RAG incident assistant over architecture docs, service logs and Kusto schemas that writes KQL queries for root-cause analysis (hackathon honorable mention).",
+          "Prototyped and implemented natural-language bulk editing of configuration: prompts turn a plain-English request into structured operations the user previews before applying.",
+          "Added experimentation to an AI gateway so changes to models, tools and agents are evaluated against real traffic before upgrades.",
+          "Migrated a Knockout.js UI to React with a workflow of specialized agents and reusable skills.",
+        ],
+      },
+      {
+        label: "Product & frontend",
+        points: [
+          "Shipped the React/TypeScript feature management experience, with targeting rules, variants and experimentation.",
+          "Led performance testing for stores with 10,000+ key-values, profiling data loading, search and responsiveness, and turned the bugs found into recommendations for handling large stores.",
+        ],
+      },
+      {
+        label: "Open source & production",
+        points: [
+          "Owned the App Configuration commands in the open-source Azure CLI (Python), designing command groups to keep parity with the REST APIs.",
+          "Maintained CI/CD integrations used by 5,000+ customers; added workload identity federation so pipelines use short-lived Entra ID tokens instead of stored secrets.",
+          "Monthly on-call for two global Azure services: incident investigation with KQL and Azure Monitor, plus safe deployments and rollbacks.",
+        ],
+      },
     ],
   },
   {

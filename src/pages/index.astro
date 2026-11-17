@@ -100,7 +100,14 @@ const img = (src: string) => `${base}${src}`;
           <section class="role">
             <h3>{r.title} <span>· {r.org}</span></h3>
             <p class="dates">{r.dates}</p>
-            <ul>{r.points.map((pt) => <li>{pt}</li>)}</ul>
+            {r.intro && <p class="role-intro">{r.intro}</p>}
+            {r.groups?.map((g) => (
+              <div class="role-group">
+                <span class="stack-label">{g.label}</span>
+                <ul>{g.points.map((pt) => <li>{pt}</li>)}</ul>
+              </div>
+            ))}
+            {r.points && <ul>{r.points.map((pt) => <li>{pt}</li>)}</ul>}
           </section>
         ))}
       </div>
@@ -268,6 +275,8 @@ const img = (src: string) => `${base}${src}`;
     .dates { font-size: .8rem; color: var(--muted); margin-bottom: .3rem; }
     .role ul { padding-left: 1.1rem; }
     .role li { margin: .3rem 0; }
+    .role-intro { font-style: italic; color: var(--muted); margin: .4rem 0 .8rem; max-width: 62ch; }
+    .role-group { margin-bottom: .8rem; }
 
     /* Mobile: stack and allow scrolling */
     @media (max-width: 860px) {
