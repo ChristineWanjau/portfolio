@@ -1,0 +1,279 @@
+---
+import {
+  profile, heroStack, stack, about, experience, experiencePainting,
+  community, communityPainting, projectsPainting, blog, blogPainting,
+} from "../data/content";
+
+const sections = [
+  { slug: "about", title: "About", caption: "Who I am and what I build", painting: about.painting,
+    teaser: `${about.stats[0].value} ${about.stats[0].label}` },
+  { slug: "experience", title: "Experience", caption: "Microsoft, an internship, a startup", painting: experiencePainting,
+    teaser: `${experience[0].title} · ${experience[0].org.split("·")[1]?.trim() ?? experience[0].org}` },
+  { slug: "projects", title: "Projects", caption: "Coming soon", painting: projectsPainting,
+    teaser: "First pieces soon" },
+  { slug: "community", title: "Community & Mentorship", caption: "Two-time mentor, and more", painting: communityPainting,
+    teaser: community.map((c) => c.org).join(" · ") },
+  { slug: "blog", title: "Blog", caption: blog.tagline, painting: blogPainting,
+    teaser: blog.text },
+];
+const alt = (p: { title: string; year: string }) => `${p.title}, Vincent van Gogh, ${p.year}`;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const img = (src: string) => `${base}${src}`;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{profile.name} · {profile.role}</title>
+  <meta name="description" content={`${profile.name}, ${profile.role}. ${profile.headline}`} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Caveat:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- Gallery wall (landing) -->
+  <main id="gallery" class="view">
+    <section class="statement">
+      <p class="eyebrow">{profile.role}</p>
+      <h1 class="name">{profile.name}</h1>
+      <p class="headline">{profile.headline}</p>
+      <div class="actions">
+        <a class="btn" href={`mailto:${profile.email}`}>Say hello</a>
+        <a class="btn ghost" href={profile.github}>GitHub</a>
+        <a class="btn ghost" href={profile.linkedin}>LinkedIn</a>
+      </div>
+      <p class="hero-stack">{heroStack.join(" · ")}</p>
+    </section>
+
+    <nav class="wall" aria-label="Sections">
+      {sections.map((s, i) => (
+        <a class={`frame p${i + 1}`} href={`#${s.slug}`}>
+          <img src={img(s.painting.src)} alt={alt(s.painting)} loading="eager" />
+          <span class="placard">
+            <strong>{s.title}</strong>
+            <em>{s.caption}</em>
+            <span class="teaser">{s.teaser}</span>
+          </span>
+        </a>
+      ))}
+    </nav>
+  </main>
+
+  <!-- Rooms -->
+  <div id="room" class="view room" hidden>
+    <header class="room-head">
+      <a class="mini-name" href="#">{profile.name}</a>
+      <nav class="tabs" aria-label="Rooms">
+        {sections.map((s) => <a class="tab" href={`#${s.slug}`} data-slug={s.slug}>{s.title}</a>)}
+      </nav>
+      <a class="btn ghost" href="#">← Gallery</a>
+    </header>
+
+    <article class="masterpiece" data-slug="about" hidden>
+      <figure class="canvas"><img src={img(about.painting.src)} alt={alt(about.painting)} loading="lazy" /><figcaption>{about.painting.title}, Van Gogh, {about.painting.year}</figcaption></figure>
+      <div class="notes">
+        <p class="hand kicker">the artist</p>
+        <h2>About</h2>
+        {about.paragraphs.map((p) => <p class="para">{p}</p>)}
+        <dl class="stats">{about.stats.map((s) => <div><dt>{s.value}</dt><dd>{s.label}</dd></div>)}</dl>
+        <div class="stack">
+          {stack.map((s) => (
+            <div class="stack-group">
+              <span class="stack-label">{s.group}</span>
+              <div class="stack-chips">{s.items.map((i) => <span class="chip">{i}</span>)}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </article>
+
+    <article class="masterpiece" data-slug="experience" hidden>
+      <figure class="canvas"><img src={img(experiencePainting.src)} alt={alt(experiencePainting)} loading="lazy" /><figcaption>{experiencePainting.title}, Van Gogh, {experiencePainting.year}</figcaption></figure>
+      <div class="notes">
+        <p class="hand kicker">the body of work</p>
+        <h2>Experience</h2>
+        {experience.map((r) => (
+          <section class="role">
+            <h3>{r.title} <span>· {r.org}</span></h3>
+            <p class="dates">{r.dates}</p>
+            <ul>{r.points.map((pt) => <li>{pt}</li>)}</ul>
+          </section>
+        ))}
+      </div>
+    </article>
+
+    <article class="masterpiece" data-slug="projects" hidden>
+      <figure class="canvas"><img src={img(projectsPainting.src)} alt={alt(projectsPainting)} loading="lazy" /><figcaption>{projectsPainting.title}, Van Gogh, {projectsPainting.year}</figcaption></figure>
+      <div class="notes empty">
+        <p class="hand kicker">new work in the studio</p>
+        <h2>Projects</h2>
+        <p class="para">This wall is waiting for its first pieces. Check back soon.</p>
+      </div>
+    </article>
+
+    <article class="masterpiece" data-slug="community" hidden>
+      <figure class="canvas"><img src={img(communityPainting.src)} alt={alt(communityPainting)} loading="lazy" /><figcaption>{communityPainting.title}, Van Gogh, {communityPainting.year}</figcaption></figure>
+      <div class="notes">
+        <p class="hand kicker">giving back</p>
+        <h2>Community &amp; Mentorship</h2>
+        {community.map((c) => (
+          <section class="role">
+            <h3>{c.org} <span>· {c.role}</span></h3>
+            <p>{c.text}</p>
+          </section>
+        ))}
+      </div>
+    </article>
+
+    <article class="masterpiece" data-slug="blog" hidden>
+      <figure class="canvas"><img src={img(blogPainting.src)} alt={alt(blogPainting)} loading="lazy" /><figcaption>{blogPainting.title}, Van Gogh, {blogPainting.year}</figcaption></figure>
+      <div class="notes empty">
+        <p class="hand kicker">new growth</p>
+        <h2>Blog</h2>
+        <p class="para">{blog.tagline}</p>
+        <p class="para">{blog.text}</p>
+      </div>
+    </article>
+  </div>
+
+  <script>
+    const gallery = document.getElementById("gallery")!;
+    const room = document.getElementById("room")!;
+    const slugs = [...document.querySelectorAll<HTMLElement>(".masterpiece")].map((m) => m.dataset.slug);
+
+    function route() {
+      const slug = location.hash.slice(1);
+      const inRoom = slugs.includes(slug);
+      gallery.hidden = inRoom;
+      room.hidden = !inRoom;
+      document.querySelectorAll<HTMLElement>(".masterpiece").forEach((m) => (m.hidden = m.dataset.slug !== slug));
+      document.querySelectorAll<HTMLElement>(".tab").forEach((t) => t.classList.toggle("on", t.dataset.slug === slug));
+      window.scrollTo(0, 0);
+    }
+    addEventListener("hashchange", route);
+    addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !room.hidden) location.hash = "";
+    });
+    route();
+  </script>
+
+  <style is:global>
+    :root {
+      --wall: #f6f2ea; --ink: #1a1a1a; --muted: #6b5a38;
+      --blue: #2a5caa; --ochre: #c8792b; --frame: #b08a3e; --canvas: #f4ead2;
+      --gild: inset 0 0 0 2px #fff1c4, inset 0 0 0 5px #8a6a2e, inset 0 0 0 7px #e7c56d, inset 0 0 0 9px #5e3f12;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: Inter, system-ui, sans-serif; color: var(--ink); background-color: var(--wall);
+      background-image:
+        radial-gradient(ellipse 60px 90px at 50% 0%, rgba(255,255,255,.55) 0 55%, transparent 70%),
+        radial-gradient(ellipse 60px 90px at 50% 100%, rgba(255,255,255,.55) 0 55%, transparent 70%),
+        radial-gradient(circle at 50% 50%, rgba(176,138,62,.14) 0 3px, transparent 4px),
+        repeating-linear-gradient(90deg, rgba(176,138,62,.05) 0 1px, transparent 1px 90px);
+      background-size: 180px 180px, 180px 180px, 180px 180px, 180px 180px;
+      background-position: 0 0, 90px 90px, 0 0, 0 0;
+    }
+    h1, h2, h3 { font-family: "Playfair Display", serif; }
+    .hand { font-family: Caveat, cursive; }
+    a { color: inherit; }
+    [hidden] { display: none !important; }
+
+    .btn { display: inline-block; padding: .55rem 1.1rem; border-radius: 999px; background: var(--ink); color: var(--wall); font-weight: 600; font-size: .85rem; text-decoration: none; }
+    .btn.ghost { background: transparent; color: var(--ink); border: 1px solid rgba(26,26,26,.3); }
+    .btn:hover { opacity: .85; }
+
+    /* Gallery wall: one screen on desktop */
+    #gallery { height: 100vh; display: grid; grid-template-columns: 1fr 1.25fr; gap: 4vw; padding: 6vh 5vw; align-items: center; }
+    .eyebrow { letter-spacing: .22em; font-size: .75rem; text-transform: uppercase; color: var(--ochre); font-weight: 600; }
+    .name { font-size: clamp(2.8rem, 6.2vw, 5.8rem); font-weight: 800; line-height: .95; letter-spacing: -.02em; margin: .7rem 0 1rem; }
+    .headline { font-family: "Playfair Display", serif; font-style: italic; font-size: clamp(1.15rem, 1.9vw, 1.6rem); color: var(--blue); max-width: 26ch; }
+    .actions { margin-top: 1.4rem; display: flex; gap: .6rem; flex-wrap: wrap; }
+    .hero-stack { margin-top: 1.4rem; font-size: .8rem; letter-spacing: .03em; color: var(--muted); max-width: 32ch; }
+
+    .stack { margin-top: 1.8rem; display: flex; flex-direction: column; gap: .7rem; max-width: 44ch; }
+    .stack-label { display: block; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: .3rem; }
+    .stack-chips { display: flex; flex-wrap: wrap; gap: .35rem; }
+    .chip { font-size: .72rem; padding: .22rem .55rem; border-radius: 999px; background: rgba(176,138,62,.14); border: 1px solid rgba(176,138,62,.35); color: var(--muted); }
+
+    .wall { display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(2, 1fr); gap: 1.4rem; height: 76vh; }
+    .p1 { grid-column: 1 / 3; grid-row: 1; }
+    .p2 { grid-column: 3 / 5; grid-row: 1; }
+    .p3 { grid-column: 5 / 7; grid-row: 1; }
+    .p4 { grid-column: 1 / 4; grid-row: 2; }
+    .p5 { grid-column: 4 / 7; grid-row: 2; }
+    .frame {
+      position: relative; display: flex; align-items: flex-end; overflow: hidden; text-decoration: none;
+      background: var(--canvas); border: 14px ridge var(--frame);
+      box-shadow: var(--gild), 0 2px 0 1px #5e3f12, 0 16px 32px rgba(35,20,5,.35);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .frame::before, .masterpiece::before {
+      content: ""; position: absolute; inset: 6px; pointer-events: none; z-index: 1;
+      border: 1px solid rgba(255,235,180,.55);
+      background:
+        radial-gradient(circle at 0 0, rgba(122,90,29,.9) 0 5px, transparent 6px),
+        radial-gradient(circle at 100% 0, rgba(122,90,29,.9) 0 5px, transparent 6px),
+        radial-gradient(circle at 0 100%, rgba(122,90,29,.9) 0 5px, transparent 6px),
+        radial-gradient(circle at 100% 100%, rgba(122,90,29,.9) 0 5px, transparent 6px);
+      background-repeat: no-repeat;
+    }
+    .frame:hover, .frame:focus-visible { transform: translateY(-5px) rotate(-.5deg); box-shadow: var(--gild), 0 2px 0 1px #5e3f12, 0 26px 44px rgba(35,20,5,.45); }
+    .frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s; }
+    .frame:hover img { transform: scale(1.04); }
+    .placard { position: relative; z-index: 2; margin: .9rem; padding: .55rem .8rem; background: rgba(244,234,210,.96); border-left: 3px solid var(--ochre); display: flex; flex-direction: column; gap: .1rem; }
+    .placard strong { font-family: "Playfair Display", serif; font-size: 1.05rem; }
+    .placard em { font-size: .78rem; color: var(--muted); }
+    .teaser {
+      font-size: .74rem; color: var(--ink); font-weight: 500;
+      max-height: 0; opacity: 0; overflow: hidden; margin-top: 0;
+      transition: max-height .25s ease, opacity .2s ease, margin-top .25s ease;
+    }
+    .frame:hover .teaser, .frame:focus-visible .teaser { max-height: 3rem; opacity: 1; margin-top: .3rem; }
+
+    /* Room */
+    .room { height: 100vh; display: grid; grid-template-rows: auto 1fr; gap: 3vh; padding: 3.5vh 5vw; }
+    .room-head { display: flex; align-items: center; gap: 2rem; }
+    .mini-name { font-family: "Playfair Display", serif; font-weight: 800; font-size: 1.5rem; text-decoration: none; white-space: nowrap; }
+    .tabs { display: flex; gap: .3rem; flex: 1; justify-content: center; flex-wrap: wrap; }
+    .tab { padding: .45rem .9rem; text-decoration: none; font-size: .9rem; border-bottom: 2px solid transparent; }
+    .tab.on, .tab:hover { border-bottom-color: var(--ochre); }
+    .masterpiece {
+      position: relative;
+      display: grid; grid-template-columns: 1fr 1.25fr; min-height: 0; overflow: hidden; background: var(--canvas);
+      border: 16px ridge var(--frame);
+      box-shadow: var(--gild), 0 2px 0 1px #5e3f12, 0 20px 44px rgba(35,20,5,.4);
+    }
+    .canvas { position: relative; min-height: 0; }
+    .canvas img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .canvas figcaption { position: absolute; left: .8rem; bottom: .6rem; font-size: .7rem; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.8); }
+    .notes { padding: 2rem 2.4rem; overflow: auto; line-height: 1.6; font-size: .95rem; }
+    .notes.empty { display: flex; flex-direction: column; justify-content: center; }
+    .kicker { font-size: 1.4rem; color: var(--ochre); }
+    .notes h2 { font-size: clamp(1.8rem, 2.8vw, 2.5rem); margin-bottom: 1rem; }
+    .para { margin-bottom: .9rem; max-width: 60ch; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 1.4rem; padding-top: 1.2rem; border-top: 1px solid rgba(26,26,26,.15); }
+    .stats dt { font-family: "Playfair Display", serif; font-size: 1.5rem; font-weight: 800; color: var(--blue); }
+    .stats dd { font-size: .75rem; color: var(--muted); }
+    .role { margin-bottom: 1.2rem; }
+    .role h3 { font-size: 1.1rem; }
+    .role h3 span { font-family: Inter, sans-serif; font-weight: 500; font-size: .85rem; color: var(--muted); }
+    .dates { font-size: .8rem; color: var(--muted); margin-bottom: .3rem; }
+    .role ul { padding-left: 1.1rem; }
+    .role li { margin: .3rem 0; }
+
+    /* Mobile: stack and allow scrolling */
+    @media (max-width: 860px) {
+      #gallery, .room { height: auto; min-height: 100vh; grid-template-columns: 1fr; }
+      .wall { display: flex; flex-direction: column; height: auto; }
+      .frame { min-height: 180px; }
+      .room-head { flex-wrap: wrap; gap: .8rem; }
+      .tabs { order: 3; width: 100%; justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; }
+      .masterpiece { grid-template-columns: 1fr; }
+      .canvas { min-height: 220px; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</body>
+</html>
