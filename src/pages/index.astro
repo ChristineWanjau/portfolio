@@ -1,12 +1,12 @@
 ---
 import {
-  profile, heroStack, about, credentials, education, experience, experiencePainting,
+  profile, heroStack, stack, about, credentials, education, experience, experiencePainting,
   community, communityPainting, projectsPainting, blog, blogPainting,
 } from "../data/content";
 
 const sections = [
   { slug: "about", title: "About", caption: "Who I am and what I build", painting: about.painting,
-    teaser: `${about.stats[0].value} ${about.stats[0].label}` },
+    teaser: "Four-plus years shipping cloud products" },
   { slug: "experience", title: "Experience", caption: "Microsoft, an internship, a startup", painting: experiencePainting,
     teaser: `${experience[0].title} · ${experience[0].org.split("·")[1]?.trim() ?? experience[0].org}` },
   { slug: "projects", title: "Projects", caption: "Coming soon", painting: projectsPainting,
@@ -75,7 +75,7 @@ const img = (src: string) => `${base}${src}`;
         <p class="hand kicker">the artist</p>
         <h2>About</h2>
         {about.paragraphs.map((p) => <p class="para">{p}</p>)}
-        <dl class="stats">{about.stats.map((s) => <div><dt>{s.value}</dt><dd>{s.label}</dd></div>)}</dl>
+        <dl class="skills">{stack.map((s) => <div><dt>{s.group}</dt><dd>{s.items.join(" · ")}</dd></div>)}</dl>
         <div class="creds">
           <section>
             <span class="stack-label">Certifications &amp; Awards</span>
@@ -258,9 +258,10 @@ const img = (src: string) => `${base}${src}`;
     .kicker { font-size: 1.4rem; color: var(--ochre); }
     .notes h2 { font-size: clamp(1.8rem, 2.8vw, 2.5rem); margin-bottom: 1rem; }
     .para { margin-bottom: .9rem; max-width: 60ch; }
-    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 1.4rem; padding-top: 1.2rem; border-top: 1px solid rgba(26,26,26,.15); }
-    .stats dt { font-family: "Playfair Display", serif; font-size: 1.5rem; font-weight: 800; color: var(--blue); }
-    .stats dd { font-size: .75rem; color: var(--muted); }
+    .skills { display: flex; flex-direction: column; gap: .4rem; margin-top: 1.4rem; padding-top: 1.2rem; border-top: 1px solid rgba(26,26,26,.15); font-size: .85rem; }
+    .skills div { display: grid; grid-template-columns: 4rem 1fr; gap: .8rem; align-items: baseline; }
+    .skills dt { font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ochre); font-weight: 600; }
+    .skills dd { color: var(--ink); }
     .role { margin-bottom: 1.2rem; }
     .role h3 { font-size: 1.1rem; }
     .role h3 span { font-family: Inter, sans-serif; font-weight: 500; font-size: .85rem; color: var(--muted); }
@@ -277,7 +278,6 @@ const img = (src: string) => `${base}${src}`;
       .tabs { order: 3; width: 100%; justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; }
       .masterpiece { grid-template-columns: 1fr; }
       .canvas { min-height: 220px; }
-      .stats { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </body>

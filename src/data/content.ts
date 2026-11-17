@@ -10,23 +10,15 @@ export const profile = {
 export const heroStack = ["LLMs & RAG", "Python", "TypeScript", "React", "Azure"];
 
 export const stack = [
-  { group: "Applied AI", items: ["LLM apps", "RAG", "Prompt engineering", "Agents", "Model evaluation"] },
-  { group: "Languages", items: ["Python", "TypeScript", "JavaScript", "C#"] },
-  { group: "Frontend", items: ["React", "Angular", "HTML/CSS"] },
-  { group: "Cloud & APIs", items: ["Azure", "REST APIs", "Kubernetes", "Entra ID"] },
-  { group: "Delivery", items: ["CI/CD", "GitHub Actions", "Docker", "Azure CLI"] },
+  { group: "AI", items: ["LLM apps", "RAG", "Agents", "Prompt engineering", "Evaluation"] },
+  { group: "Build", items: ["Python", "TypeScript", "C#", "React", "Angular"] },
+  { group: "Ship", items: ["Azure", "Kubernetes", "Docker", "CI/CD", "GitHub Actions"] },
 ];
 
 export const about = {
   paragraphs: [
     "Four-plus years shipping cloud products, from the interfaces customers click to the CLIs and pipelines behind them. Today I build AI into Azure App Configuration at Microsoft, a service behind 100,000+ configuration stores, and I work AI-first, with agents and custom skills in my daily loop. Before that, I shipped tools for Windows server admins and a startup's first product in Nairobi. I like owning a feature end to end, and I care most about the part after the demo: evaluation, safety review and shipping to production.",
     "I'm also studying for an MS in Computer Science, specializing in AI, at Georgia Tech, and mentoring women in tech across Kenya.",
-  ],
-  stats: [
-    { value: "4+ yrs", label: "shipping cloud products" },
-    { value: "15+", label: "customer-facing features" },
-    { value: "30+", label: "open-source PRs" },
-    { value: "5,000+", label: "customers on my CI/CD tools" },
   ],
   painting: { src: "/art/starry-night.jpg", title: "The Starry Night", year: "1889" },
 };
