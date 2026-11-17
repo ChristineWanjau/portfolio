@@ -74,7 +74,7 @@ export const experience: Role[] = [
       {
         label: "Product & frontend",
         points: [
-          "Shipped the React/TypeScript feature management experience, with targeting rules, variants and experimentation.",
+          "Owned multiple customer-facing React/TypeScript features end to end across the portal, from design and stakeholder reviews through release.",
           "Led performance testing for stores with 10,000+ key-values, profiling data loading, search and responsiveness, and turned the bugs found into recommendations for handling large stores.",
         ],
       },
@@ -92,7 +92,11 @@ export const experience: Role[] = [
     title: "Software Engineer Intern",
     org: "Microsoft · Windows Admin Center",
     dates: "May – Aug 2021",
-    points: ["Shipped Angular experiences for server admins and helped move services from .NET Framework to .NET Core."],
+    intro: "Windows Admin Center is Microsoft's browser-based tool for managing Windows servers, clusters and infrastructure. IT administrators use it to configure and monitor machines remotely, without remoting into each server.",
+    points: [
+      "Built and shipped Angular frontend experiences used by administrators to manage Windows servers and infrastructure.",
+      "Contributed to migrating backend services from .NET Framework to .NET Core to modernize the service architecture and improve maintainability.",
+    ],
   },
   {
     title: "Software Engineer",
