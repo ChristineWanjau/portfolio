@@ -124,6 +124,23 @@ export const community: CommunityItem[] = [
 export const communityPainting = { src: "/art/cafe-terrace.jpg", title: "Café Terrace at Night", year: "1888" };
 export const projectsPainting = { src: "/art/wheatfield-cypresses.jpg", title: "Wheat Field with Cypresses", year: "1889" };
 
+export const projects = [
+  {
+    name: "Lease & Contract Explainer",
+    demo: "https://christinewanjau.github.io/lease-contract-explainer/",
+    demoNote: "Demo replays recorded results from sample contracts; run it locally to analyse your own.",
+    code: "https://github.com/ChristineWanjau/lease-contract-explainer",
+    summary: "An AI contract reviewer that explains what you're signing, flags risky clauses, and answers questions with citations to the exact clause. It runs entirely on your own machine, so a real contract never leaves it.",
+    points: [
+      "Grounded answers: each question pulls the 4 most relevant clauses from a vector index and answers only from them. Citations map back to the stored clause text, so every quote is word for word; if nothing is cited, the answer becomes \"The contract doesn't say.\"",
+      "Structured, checked AI output: summaries, risk flags and contract-type detection come back as JSON checked against Pydantic models, with a retry on bad output. Below 0.7 confidence it falls back to a general contract type instead of guessing.",
+      "Domain rules from config: each contract type (general, Kenyan employment) is a JSON file with its own summary fields, risk checklist and legal rules. The model only decides whether a rule applies; the legal details always come from the config.",
+      "Tested without a live model: the models are passed in, so 120 tests run in CI against stand-in models. Results stream to the browser as they're ready.",
+    ],
+    stack: ["Python", "FastAPI", "LangChain", "Ollama (qwen3:8b, nomic-embed-text)", "Pydantic", "Next.js", "React", "Tailwind"],
+  },
+];
+
 export const blog = {
   tagline: "Writing on AI engineering — launching soon",
   text: "Notes on LLM evaluation, RAG, and shipping AI features to production. First posts coming soon.",

@@ -1,7 +1,7 @@
 ---
 import {
   profile, heroStack, stack, about, credentials, education, experience, experiencePainting,
-  community, communityPainting, projectsPainting, blog, blogPainting,
+  community, communityPainting, projects, projectsPainting, blog, blogPainting,
 } from "../data/content";
 
 const sections = [
@@ -9,8 +9,8 @@ const sections = [
     teaser: "Four-plus years shipping cloud products" },
   { slug: "experience", title: "Experience", caption: "Microsoft, an internship, a startup", painting: experiencePainting,
     teaser: `${experience[0].title} · ${experience[0].org.split("·")[1]?.trim() ?? experience[0].org}` },
-  { slug: "projects", title: "Projects", caption: "Coming soon", painting: projectsPainting,
-    teaser: "First pieces soon" },
+  { slug: "projects", title: "Projects", caption: "Lease & Contract Explainer", painting: projectsPainting,
+    teaser: "Local AI contract reviewer with cited answers" },
   { slug: "community", title: "Community & Mentorship", caption: "Two-time mentor, and more", painting: communityPainting,
     teaser: community.map((c) => c.org).join(" · ") },
   { slug: "blog", title: "Blog", caption: blog.tagline, painting: blogPainting,
@@ -115,10 +115,22 @@ const img = (src: string) => `${base}${src}`;
 
     <article class="masterpiece" data-slug="projects" hidden>
       <figure class="canvas"><img src={img(projectsPainting.src)} alt={alt(projectsPainting)} loading="lazy" /><figcaption>{projectsPainting.title}, Van Gogh, {projectsPainting.year}</figcaption></figure>
-      <div class="notes empty">
+      <div class="notes">
         <p class="hand kicker">new work in the studio</p>
         <h2>Projects</h2>
-        <p class="para">This wall is waiting for its first pieces. Check back soon.</p>
+        {projects.map((p) => (
+          <section class="role">
+            <h3>{p.name}</h3>
+            <p class="links">
+              <a href={p.demo} target="_blank" rel="noopener">Live demo ↗</a>
+              <a href={p.code} target="_blank" rel="noopener">Code ↗</a>
+            </p>
+            <p class="demo-note">{p.demoNote}</p>
+            <p class="role-intro">{p.summary}</p>
+            <ul>{p.points.map((pt) => <li>{pt}</li>)}</ul>
+            <p class="proj-stack"><span class="stack-label">Stack</span>{p.stack.join(" · ")}</p>
+          </section>
+        ))}
       </div>
     </article>
 
@@ -277,6 +289,10 @@ const img = (src: string) => `${base}${src}`;
     .role li { margin: .3rem 0; }
     .role-intro { font-style: italic; color: var(--muted); margin: .4rem 0 .8rem; max-width: 62ch; }
     .role-group { margin-bottom: .8rem; }
+    .links { display: flex; gap: 1rem; font-size: .85rem; font-weight: 600; margin: .3rem 0 .1rem; }
+    .links a { color: var(--blue); }
+    .demo-note { font-size: .75rem; color: var(--muted); }
+    .proj-stack { font-size: .85rem; margin-top: .6rem; }
 
     /* Mobile: stack and allow scrolling */
     @media (max-width: 860px) {
